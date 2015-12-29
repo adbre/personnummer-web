@@ -20,7 +20,7 @@
     "bootstrap": "~3.3.6",
     "knockout": "~3.4.0",
     "jquery": "~2.1.4",
-    "personnummer-js": "~1.2.0",
+    "personnummer-js": "~1.3.0",
     "moment": "~2.10.6"
   }
 }
