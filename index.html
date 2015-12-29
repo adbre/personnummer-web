@@ -1,0 +1,103 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <title>Personnummer</title>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/knockout/dist/knockout.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/personnummer-js/Personnummer.js"></script>
+    
+    <script src="index.js"></script>
+    
+    <style>
+      td {
+        font-family: "Courier New", Courier, monospace;
+      }
+      
+      .page {
+        margin-top: 1em;
+      }
+
+      .footer {
+        font-size: 0.9em;
+        color: grey;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 data-bind="text: greeting"></h1>
+      
+      <blockquote>
+        <p>
+        Most people who are born in Sweden, or who move
+        here, are entered in the population register. In connection
+        to being registered for the first time, a person
+        will receive a personal identity number. The personal
+        identity number is unique to each person, and you
+        keep it for life. You remain registered in Sweden until
+        the day you move abroad or die.
+        </p>
+        <footer><cite><a href="https://www.skatteverket.se/privat/sjalvservice/blanketterbroschyrer/broschyrer/info/717b.4.39f16f103821c58f680008017.html" target="top">Population registration in Sweden (SKV 717B)</a></cite>, the Swedish Tax Agency</footer>
+      </blockquote>
+
+      <div role="navigation">
+        <ul class="nav nav-tabs" data-bind="foreach: tabLinks">
+          <li role="presentation" data-bind="css: { 'active': isActive }"><a href="#" data-bind="text: text, click: $root.onTabClick"></a></li>
+        </ul>
+      </div>
+      
+      <div class="page" data-bind="visible: tabs.validate.isActive, with: tabs.validate">
+        <form>
+          <div class="form-group">
+            <input type="text" class="form-control" id="personnummer" placeholder="Personnummer" data-bind="value: input" />
+          </div>
+          <button type="submit" class="btn btn-primary" data-bind="click: tryParse">Validate</button>
+        </form>
+      </div>
+      
+      <div class="page" data-bind="visible: tabs.generate.isActive, with: tabs.generate">
+        <form>
+          <div class="form-group">
+            <label for="dateOfBirth">Date of birth</label>
+            <input type="date" class="form-control" id="dateOfBirth" data-bind="value: dateOfBirth" />
+          </div>
+          <div class="form-group">
+            <label for="numbers">Numbers (Optional, 0-999)</label>
+            <input type="number" class="form-control" id="numbers" data-bind="value: numbers" min="0" max="999" />
+          </div>
+          
+          <button type="submit" class="btn btn-primary" data-bind="click: tryParse">Generate</button>
+        </form>
+      </div>
+
+      <table class="table table-striped" data-bind="if: typeof personnummer() !== 'undefined'">
+        <tbody>
+          <tr><th>Is valid</th><td data-bind="text: isValid"></td></tr>
+          <!-- ko if: isValid -->
+          <tr><th>Age</th><td data-bind="text: getAge"></td></tr>
+          <tr><th>Date of birth</th><td data-bind="text: getDateOfBirth"></td></tr>
+          <tr><th>Modern format</th><td data-bind="text: toModernString"></td></tr>
+          <tr><th>Traditional format</th><td data-bind="text: toTraditionalString"></td></tr>
+          <!-- /ko -->
+        </tbody>
+      </table>
+    </div>
+
+    <a href="https://github.com/adbre/personnummer-js"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+    
+    <div class="footer text-center">
+      Copyright &copy; Adam Brengesjö
+    </div>
+    
+    <script>
+      $(function () {
+        ko.applyBindings(new ViewModel());
+      });
+    </script>
+  </body>
+</html>
